@@ -1,0 +1,12 @@
+.inside .email-tag {
+  margin: 11px;
+  padding: 0 15px;
+  display: inline-block;
+  max-width: 425px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); }
+
+.inside .custom_xml_desc {
+  margin: 0;
+  height: 4em;
+  width: 98%; }
