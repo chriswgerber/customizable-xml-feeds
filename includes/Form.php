@@ -4,7 +4,7 @@
  *
  * Class abstraction for simple form functions.
  *
- * @since 1.0.0
+ * @since   1.0.0
  *
  * @package Custom-XML-Feeds
  */
@@ -15,7 +15,7 @@ Abstract Class Form {
 	/**
 	 * Page Title
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @var string
@@ -25,7 +25,7 @@ Abstract Class Form {
 	/**
 	 * String to call settings fields
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @var string
@@ -35,7 +35,7 @@ Abstract Class Form {
 	/**
 	 * String to call settings sections
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @var string
@@ -43,7 +43,7 @@ Abstract Class Form {
 	public $settings_sections;
 
 	/**
-	 * @since 0.2.0
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @var array
@@ -53,7 +53,7 @@ Abstract Class Form {
 	/**
 	 * String identifier for the options
 	 *
-	 * @since 0.2.0
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @var string
@@ -65,7 +65,7 @@ Abstract Class Form {
 	 *
 	 * Abstract
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 */
 	abstract public function render_form();
@@ -73,7 +73,7 @@ Abstract Class Form {
 	/**
 	 * Adds the title to the page.
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @param $title string Form Title
@@ -88,21 +88,21 @@ Abstract Class Form {
 	/**
 	 * Creates block of text
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @param $args array
 	 */
 	public function paragraph( $args ) {
 		$description = $args[0]['description'];
-		?><p><?php _e( $description, 'custom_xml' );?></p>
-	<?php
+		?><p><?php _e( $description, 'custom_xml' ); ?></p>
+		<?php
 	}
 
 	/**
 	 * Creates input
 	 *
-	 * @since 0.2.0
+	 * @since  1.0.0
 	 * @access public
 	 *
 	 * @param $args array
@@ -122,9 +122,9 @@ Abstract Class Form {
 			<input type="<?php _e( $field, 'custom_xml' ); ?>"
 			       id="<?php _e( $id, 'custom_xml' ); ?>"
 			       name="<?php _e( $id, 'custom_xml' ); ?>"
-			       value="<?php _e( $value, 'custom_xml' ); ?>" />
+			       value="<?php _e( $value, 'custom_xml' ); ?>"/>
 		</td>
-	<?php
+		<?php
 	}
 
 	/**
@@ -132,27 +132,28 @@ Abstract Class Form {
 	 *
 	 * Creates an HTML button.
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @param $value string Value of the submit button
+	 * @param $value   string Value of the submit button
 	 * @param $primary bool Mark a button as a primary button
 	 */
 	public function button( $value, $primary = false ) {
 		$value = wp_strip_all_tags( $value, true );
-		$button_type = ($primary === false ? 'button-secondary' : 'button-primary' )
+		$button_type = ( $primary === false ? 'button-secondary' : 'button-primary' )
 		?>
-		<input type="submit" name="submit" id="submit" class="button <?php echo $button_type; ?>" value="<?php echo $value; ?>">
-	<?php
+		<input type="submit" name="submit" id="submit" class="button <?php echo $button_type; ?>"
+		       value="<?php echo $value; ?>">
+		<?php
 	}
 
 	/**
 	 * Simple method for accessing a submit button
 	 *
-	 * @since 0.0.1
+	 * @since  1.0.0
 	 * @access public
 	 */
 	public function submit_button() {
-		$this->button("Save Changes", true);
+		$this->button( 'Save Changes', true );
 	}
 }

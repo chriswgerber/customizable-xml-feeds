@@ -2,6 +2,9 @@
 /**
  * Class for creating feed objects.
  *
+ * This is the object that creates the feed. Handles a few functions for enqueuing
+ * data, but helps hold data needed to create the feed.
+ *
  * @since   1.0.0
  *
  * @package Custom-XML-Feeds
@@ -13,6 +16,8 @@ use CustomXMLFeeds\CustomXML;
 class Feed {
 
 	/**
+	 * Contains data for the feed
+	 *
 	 * @access public
 	 * @since  1.0.0
 	 *
@@ -21,10 +26,12 @@ class Feed {
 	public $xml;
 
 	/**
+	 * Key needed to access the meta data from for each post.
+	 *
 	 * @access public
 	 * @since  1.0.0
 	 *
-	 * @var
+	 * @var string Key for the meta data
 	 */
 	public $desc_meta_key;
 
@@ -37,20 +44,22 @@ class Feed {
 	 * @param CustomXML $xml
 	 */
 	public function __construct( CustomXML $xml ) {
-		$this->xml = $xml;
+		$this->xml           = $xml;
 		$this->desc_meta_key = $xml->metabox->meta_key;
 		// Let's get rid of stupid smart quotes, please
-		remove_filter( 'the_content', 'wptexturize' );
-		remove_filter( 'the_excerpt', 'wptexturize' );
-		remove_filter( 'comment_text', 'wptexturize' );
-		remove_filter( 'the_title_rss', 'wptexturize' );
+		$this->remove_texturize_filters();
 	}
 
 	/**
 	 * Instantiates the feed.
 	 *
+	 * This is the function for creating the feed. It is queued up in an action
+	 * and that action will pull in the feed templates and run the data.
+	 *
 	 * @access public
 	 * @since  1.0.0
+	 *
+	 * @return void
 	 */
 	public function get_feed() {
 		/**
@@ -97,6 +106,7 @@ class Feed {
 	 * @access public
 	 * @since  1.0.0
 	 *
+	 * @return mixed/void
 	 */
 	public function feed_image() {
 		if ( has_post_thumbnail() ) {
@@ -110,7 +120,7 @@ class Feed {
 	 * @access public
 	 * @since  1.0.0
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_feed_image() {
 		/**
@@ -136,6 +146,7 @@ class Feed {
 	 * @access public
 	 * @since  1.0.0
 	 *
+	 * @return mixed/void
 	 */
 	public function the_description() {
 		/**
@@ -244,6 +255,21 @@ class Feed {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Removes smart quotes. Or prevents smartquotes
+	 *
+	 * @access protected
+	 * @since  1.0.0
+	 *
+	 * @return void
+	 */
+	protected function remove_texturize_filters() {
+		remove_filter( 'the_content', 'wptexturize' );
+		remove_filter( 'the_excerpt', 'wptexturize' );
+		remove_filter( 'comment_text', 'wptexturize' );
+		remove_filter( 'the_title_rss', 'wptexturize' );
 	}
 
 }

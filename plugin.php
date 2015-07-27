@@ -16,8 +16,7 @@
  * Github URI:        https://www.github.com/ThatGerber/customizable-xml-feeds
  * Github Branch:     stable
  * Version:           1.0.0
- *
-*/
+ */
 namespace CustomXMLFeeds;
 /* Files */
 include 'includes/Form.php';
@@ -28,7 +27,7 @@ include 'includes/admin/Page.php';
 include 'includes/admin/Form.php';
 
 /* Fires up the instance */
-$custom_xml_feeds = new CustomXML;
+$custom_xml_feeds                = new CustomXML;
 $custom_xml_feeds->template_dir  = dirname( __FILE__ );
 $custom_xml_feeds->options_str   = 'custom_xml_feeds';
 $custom_xml_feeds->taxonomy_slug = 'email-tags';
@@ -41,7 +40,7 @@ $custom_xml_feeds->defaults      = array(
 /* Register the Email Tag Taxonomy */
 add_action( 'init', array( $custom_xml_feeds, 'register_taxonomy' ), 0 );
 /* Adds image sizes */
-add_action( 'wp_loaded', array( $custom_xml_feeds, 'add_image_sizes') );
+add_action( 'wp_loaded', array( $custom_xml_feeds, 'add_image_sizes' ) );
 /* Metabox */
 $custom_xml_feeds->metabox = new Metabox;
 /* Settings */
@@ -72,22 +71,22 @@ add_action(
 /* Admin */
 if ( is_admin() ) {
 	/* Setup form */
-	$custom_xml_admin       = new Admin_Page( );
-	$custom_xml_admin->form = new Admin\Form();
-	$custom_xml_admin->xml  = $custom_xml_feeds;
+	$custom_xml_admin              = new Admin_Page();
+	$custom_xml_admin->form        = new Admin\Form();
+	$custom_xml_admin->xml         = $custom_xml_feeds;
 	$custom_xml_admin->page_title  = 'Custom XML Feeds';
 	$custom_xml_admin->menu_title  = 'Custom XML Feeds';
 	$custom_xml_admin->user_cap    = 'manage_options';
 	$custom_xml_admin->plugin_slug = 'customizable-xml-feeds';
 	$custom_xml_admin->set_options_string( $custom_xml_feeds->options_str );
 	/* Check for custom form submit value. If it exists, update the data that is there. */
-	if ( filter_input( INPUT_POST, 'submit') == 'Update Tags' ) {
+	if ( filter_input( INPUT_POST, 'submit' ) == 'Update Tags' ) {
 		$custom_xml_admin->update_tags();
 	}
 	/* Admin Scripts */
-	add_action('admin_enqueue_scripts', array( $custom_xml_admin, 'scripts_and_styles' ) );
+	add_action( 'admin_enqueue_scripts', array( $custom_xml_admin, 'scripts_and_styles' ) );
 	/* General Section */
-	add_filter( $custom_xml_admin->options_str .'_sections', ( function( $sections ) {
+	add_filter( $custom_xml_admin->options_str . '_sections', ( function ( $sections ) {
 		$sections['import_data'] = array(
 			'id'    => 'manage_feeds',
 			'title' => 'Manage Feeds'
@@ -96,7 +95,7 @@ if ( is_admin() ) {
 		return $sections;
 	} ) );
 	/* Setting */
-	add_filter( $custom_xml_admin->options_str . '_fields', ( function( $fields ) {
+	add_filter( $custom_xml_admin->options_str . '_fields', ( function ( $fields ) {
 		$fields['intro'] = array(
 			'id'          => 'intro',
 			'field'       => 'paragraph',

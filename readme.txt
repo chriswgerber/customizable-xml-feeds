@@ -41,14 +41,14 @@ and finally from the post.
 
 The format of the feed is:
 
-````
+`
 <item> 
     <title>Title of the Post</title>
     <link>Permalink to the Post</link>
     <image>Associated Image URL</image>
     <description>Story Description</description>
 </item> 
-````
+`
 
 Feeds can be located at
 

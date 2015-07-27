@@ -1,5 +1,9 @@
 <?php
 /**
+ * Custom XML Feed Container
+ *
+ * Holds strings, methods, object instances, etc.
+ *
  * @since   1.0.0
  *
  * @package Custom-XML-Feeds
@@ -9,11 +13,17 @@ namespace CustomXMLFeeds;
 class CustomXML {
 
 	/**
+	 * @since  1.0.0
+	 * @access public
+	 *
 	 * @var Feed
 	 */
 	public $feed;
 
 	/**
+	 * @since  1.0.0
+	 * @access public
+	 *
 	 * @var Metabox
 	 */
 	public $metabox;
@@ -79,6 +89,10 @@ class CustomXML {
 	/**
 	 * Returns options for a string
 	 *
+	 * Takes a string and uses the WordPress get_option method to find the data.
+	 * If the data has already been pulled once, it'll save the call and just
+	 * return the value.
+	 *
 	 * @since  1.0.0
 	 * @access public
 	 *
@@ -99,8 +113,13 @@ class CustomXML {
 	/**
 	 * Adds the image sizes to be used with the plugin.
 	 *
+	 * Images are set up as {taxonomy}\{slug}\thumb and can be called back
+	 * to be used by referencing that info.
+	 *
 	 * @since  1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function add_image_sizes() {
 		$this->tags = $this->get_options();
@@ -125,10 +144,14 @@ class CustomXML {
 	}
 
 	/**
-	 * Register email Tags taxonomy
+	 * Register email tags taxonomy
+	 *
+	 * Ads the labels, grabs the post types, and registers the taxonomy.
 	 *
 	 * @since  1.0.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function register_taxonomy() {
 		// Register Custom Taxonomy
@@ -167,11 +190,16 @@ class CustomXML {
 	/**
 	 * Returns all tags as objects
 	 *
-	 * @return array|\WP_Error
+	 * If it fails to return as objects, it'll return nothing to avoid trying to
+	 * send an error out to future objects.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @return array|null
 	 */
 	public function get_all_tags() {
-
-		return get_terms( $this->taxonomy_slug, array(
+		$tags = get_terms( $this->taxonomy_slug, array(
 			'orderby'      => 'name',
 			'order'        => 'asc',
 			'hide_empty'   => false,
@@ -180,10 +208,24 @@ class CustomXML {
 			'include'      => array(),
 			'fields'       => 'all'
 		) );
+
+		if ( is_wp_error( $tags ) ) {
+
+			return null;
+		}
+
+		return $tags;
 	}
 
 	/**
-	 * @param $link
+	 * Returns the admin url for the email tags
+	 *
+	 * I didn't want to remake this link. So I included the function.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @param string $link Text to include in the body of the anchor tag
 	 *
 	 * @return string
 	 */
@@ -198,8 +240,10 @@ class CustomXML {
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @param $term_id int
-	 * @param $tt_id   int
+	 * @param int $term_id
+	 * @param int $tt_id
+	 *
+	 * @return null
 	 */
 	public function update_option( $term_id, $tt_id ) {
 		$options           = $this->get_options();
@@ -213,8 +257,10 @@ class CustomXML {
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @param $term_id int
-	 * @param $tt_id   int
+	 * @param int $term_id
+	 * @param int $tt_id
+	 *
+	 * @return null
 	 */
 	public function delete_option( $term_id, $tt_id ) {
 		$options           = $this->get_options();
@@ -235,6 +281,9 @@ class CustomXML {
 	/**
 	 * Return all queued image sizes.
 	 *
+	 * I use this while debugging. I know I'll find a use in the future
+	 * when I need to create and associate image sizes.
+	 *
 	 * @access public
 	 * @since  1.0.0
 	 *
@@ -242,44 +291,31 @@ class CustomXML {
 	 *
 	 * @return array|bool
 	 */
-
 	public function get_image_sizes( $size = '' ) {
-
 		global $_wp_additional_image_sizes;
-
 		$sizes                        = array();
 		$get_intermediate_image_sizes = get_intermediate_image_sizes();
-
 		// Create the full array with sizes and crop info
 		foreach ( $get_intermediate_image_sizes as $_size ) {
-
 			if ( in_array( $_size, array( 'thumbnail', 'medium', 'large' ) ) ) {
-
 				$sizes[ $_size ]['width']  = get_option( $_size . '_size_w' );
 				$sizes[ $_size ]['height'] = get_option( $_size . '_size_h' );
 				$sizes[ $_size ]['crop']   = (bool) get_option( $_size . '_crop' );
-
 			} elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
-
 				$sizes[ $_size ] = array(
 					'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
 					'height' => $_wp_additional_image_sizes[ $_size ]['height'],
 					'crop'   => $_wp_additional_image_sizes[ $_size ]['crop']
 				);
-
 			}
-
 		}
-
 		// Get only 1 size if found
 		if ( $size ) {
-
 			if ( isset( $sizes[ $size ] ) ) {
 				return $sizes[ $size ];
 			} else {
 				return false;
 			}
-
 		}
 
 		return $sizes;
